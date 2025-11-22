@@ -144,6 +144,9 @@ class CrossEntropyError(object):
 class CrossEntropySoftmaxError(object):
     """Multi-class cross entropy error with Softmax applied to outputs."""
 
+    def __init__(self, label_smoothing=0.0):
+        self.label_smoothing = label_smoothing
+
     def __call__(self, outputs, targets):
         """Calculates error function given a batch of outputs and targets.
 
@@ -154,6 +157,10 @@ class CrossEntropySoftmaxError(object):
         Returns:
             Scalar error function value.
         """
+        if self.label_smoothing > 0:
+            output_dim = targets.shape[1]
+            targets = targets * (1 - self.label_smoothing) + self.label_smoothing / output_dim
+
         normOutputs = outputs - outputs.max(-1)[:, None]
         logProb = normOutputs - np.log(np.sum(np.exp(normOutputs), axis=-1)[:, None])
         return -np.mean(np.sum(targets * logProb, axis=1))
@@ -168,6 +175,10 @@ class CrossEntropySoftmaxError(object):
         Returns:
             Gradient of error function with respect to outputs.
         """
+        if self.label_smoothing > 0:
+            output_dim = targets.shape[1]
+            targets = targets * (1 - self.label_smoothing) + self.label_smoothing / output_dim
+            
         probs = np.exp(outputs - outputs.max(-1)[:, None])
         probs /= probs.sum(-1)[:, None]
         return (probs - targets) / outputs.shape[0]

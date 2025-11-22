@@ -26,7 +26,11 @@
 
 %% Question 1:
 \newcommand{\questionOne} {
-\youranswer{Question 1 - Explain what these figures contain and how the curves evolve, and spot where overfitting occurs. Reason based on the min/max points and velocities (direction and magnitude of change) of the accuracy and error curves}
+\youranswer{Question 1 - Figure \ref{fig:width_acccurves} shows the training and validation accuracy, while Figure \ref{fig:width_errorcurves} shows the cross-entropy error.
+Width 128 achieves the lowest training error (0.109) and highest training accuracy, indicating high capacity. However, its validation error (1.589) is significantly higher, and the validation error curve rises sharply after epoch 20, indicating severe overfitting.
+Width 32 has higher training error (0.484) but the gap between training and validation error is smaller (Val Err 0.649), suggesting less overfitting but potentially underfitting or limited capacity.
+Width 64 offers a balance but still overfits.
+Overfitting is identified by the divergence of training and validation curves, specifically where validation error starts to increase while training error continues to decrease.}
 }
 
 %% Question 2:
@@ -36,7 +40,8 @@
 
 %% Question 3:
 \newcommand{\questionThree} {
-\youranswer{Question 3 - Discuss whether varying width affects the results in a consistent way, and whether the results are expected and match well with the prior knowledge (by which we mean your expectations as are formed from the relevant Theory and literature)}
+\youranswer{Question 3 - Varying width affects results consistently: wider networks reduce bias (lower training error) but increase variance (higher overfitting).
+Results match expectations: increasing parameters (width) improves training performance but requires regularization to generalize well. Width 128 clearly has enough capacity to memorize the training data but fails to generalize as well as it could with regularization.}
 }
 
 %% Question 4:
@@ -46,36 +51,53 @@
 
 %% Question 5:
 \newcommand{\questionFive} {
-\youranswer{Question 5 - Discuss whether varying depth affects the results in a consistent way, and whether the results are expected and match well with the prior knowledge (by which we mean your expectations as are formed from the relevant Theory and literature)}
+\youranswer{Question 5 - Varying depth shows a similar trend to width but with diminishing returns.
+Depth 2 achieves 82.02\% accuracy, which is better than Depth 1 (80.75\%).
+Depth 3 (82.42\%) is marginally better than Depth 2 but has high validation error (1.539), similar to Depth 2 (1.589), indicating both are overfitting.
+Depth 1 has the lowest validation error (0.975) relative to its training error, suggesting it is the most stable but lacks capacity.
+Results are consistent with theory that deeper networks can model more complex functions but are harder to train and more prone to overfitting without regularization.}
 }
 
 
 %% Question 6:
 \newcommand{\questionSix} {
-\youranswer{Question 6 - Explain how one could use a combination of L1 and L2 regularisation. Discuss any potential benefits of this approach. Present an equation for this combined loss function and explain all relevant variables and hyperparameters.}
+\youranswer{Question 6 - Combined L1 and L2 regularization (Elastic Net) adds both penalty terms to the loss function:
+$L(\theta) = L_{data}(\theta) + \lambda_1 \sum |w| + \lambda_2 \sum w^2$
+Where $\lambda_1$ and $\lambda_2$ are hyperparameters controlling the strength of L1 and L2 penalties respectively.
+Benefits: L1 promotes sparsity (feature selection), driving irrelevant weights to zero. L2 prevents any single weight from becoming too large and handles correlated features better than L1 alone.
+The combination allows selecting a sparse model that is also stable.}
 }
 
 
 %% Question 7:
 \newcommand{\questionSeven} {
-\youranswer{Question 7 - Assume you had a limited experiment budget for exactly \textbf{4} experiment runs dedicated to testing the effectiveness of your proposed combination of L1 and L2 Regularization in Section~\ref{sec:L1L2combo}. Argue for which 4 configurations to run based on any previous results or other information you consider relevant. Run those experiments and add the results in Table~4 and Figure~5 (you will then discuss those results alongside all others in the next question below).
-
-(Even if you have not managed to implement your L1 and L2 combination; still argue based on your proposed approach).
-
+\youranswer{Question 7 - Based on previous results, the optimal L1 coefficient was around 1e-3 (85.3\% Acc) and L2 was around 5e-4 to 1e-3 (85.1-85.4\% Acc).
+Therefore, I proposed to test combinations around these values:
+1. L1=1e-3, L2=1e-3: Testing if combining best single values helps.
+2. L1=1e-3, L2=5e-4: Strong L1, moderate L2.
+3. L1=5e-4, L2=1e-3: Moderate L1, strong L2.
+4. L1=5e-4, L2=5e-4: Weaker regularization to see if single penalties were too strong when combined.
 }
 }
 
 
 %% Question 8:
 \newcommand{\questionEight} {
-\youranswer{Question 8 - Explain the experimental details (e.g. hyperparameters), discuss the results in terms of their generalisation performance and overfitting. Select and test the best performing model as part of this analysis.
+\youranswer{Question 8 - The experiment results (Table 4) show that the combination of L1=1e-3 and L2=1e-3 achieved the highest validation accuracy of 86.34\%.
+This is higher than the best single L1 (85.3\%) and best single L2 (85.4\%).
+The training error (0.361) and validation error (0.414) are close, indicating a small generalization gap (0.053), much better than the baseline gap (~1.3).
+This confirms that combined regularization effectively controls overfitting while maintaining high accuracy.
 }
 }
 
 
 %% Question 9:
 \newcommand{\questionNine} {
-\youranswer{Question 9 - A colleague proposed using a custom activation function (which can be identified as CustomActivationLayer() in your Coursework\_1.ipynb notebook and the mlp package). Run the prepared experiment in the "Problematic Training" cell in your Coursework\_1.ipynb notebook, and display the results in Figure~6. Analyse the results. Is the model overfitting? Explain the cause of the problematic performance of the model?
+\youranswer{Question 9 - The Custom Activation function is defined as $f(x) = \frac{1}{20(1+e^{-x})}$.
+The factor 20 in the denominator scales the output to be between 0 and 0.05.
+The derivative is $f'(x) = f(x)(1 - 20f(x))$. Since $f(x)$ is very small, the gradient is extremely small (vanishing gradient problem).
+Figure 6 shows the gradient flow is negligible, and the model fails to learn (Accuracy remains low, Error remains high).
+The model is not overfitting; it is failing to train (underfitting) due to vanishing gradients caused by the scaling factor.
 }
 }
 
@@ -84,7 +106,13 @@
 
 %% Question 10:
 \newcommand{\questionTen} {
-\youranswer{Question 10 - Briefly draw your conclusions based on the results from the previous sections (what are the take-away messages?), discussing them in the context of the overall literature, and conclude your report with a recommendation for future directions}
+\youranswer{Question 10 - Conclusions:
+1. Increasing Network Width and Depth increases model capacity but leads to severe overfitting without regularization.
+2. Regularization techniques (Dropout, L1, L2, Label Smoothing) significantly improve generalization.
+3. Combining L1 and L2 regularization (Elastic Net) yielded the best performance (86.34\% accuracy), outperforming individual methods.
+4. Activation functions must be carefully scaled to avoid vanishing gradients, as demonstrated by the Custom Activation failure.
+Future directions could explore learnable activation functions or more advanced regularization like Batch Normalization.
+}
 }
 
 %% - - - - - - - - - - - - FIGURES - - - - - - - - - - - - 
@@ -96,13 +124,13 @@
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
-        \includegraphics[width=\linewidth]{figures/empty_acc_curve_width.png}
+        \includegraphics[width=\linewidth]{figures/width_acccurves.png}
         \caption{accuracy by epoch}
         \label{fig:width_acccurves}
     \end{subfigure} 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/empty_error_curve_width.png}
+        \includegraphics[width=\linewidth]{figures/width_errorcurves.png}
         \caption{error by epoch}
         \label{fig:width_errorcurves}
     \end{subfigure} 
@@ -119,13 +147,13 @@
 \begin{figure}[t]
     \centering
     \begin{subfigure}{\linewidth}
-        \includegraphics[width=\linewidth]{figures/empty_acc_curve_depth.png}
+        \includegraphics[width=\linewidth]{figures/depth_acccurves.png}
         \caption{accuracy by epoch}
         \label{fig:depth_acccurves}
     \end{subfigure} 
     \begin{subfigure}{\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/empty_error_curve_depth.png}
+        \includegraphics[width=\linewidth]{figures/depth_errorcurves.png}
         \caption{error by epoch}
         \label{fig:depth_errorcurves}
     \end{subfigure} 
@@ -142,13 +170,13 @@
 \begin{figure*}[t]
     \centering
     \begin{subfigure}{.475\linewidth}
-        \includegraphics[width=\linewidth]{figures/empty_dropout_plot.png}
+        \includegraphics[width=\linewidth]{figures/dropout_plot.png}
         \caption{Accuracy and error by inclusion probability.}
         \label{fig:dropoutrates}
     \end{subfigure} 
     \begin{subfigure}{.475\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{figures/empty_wd_plot.png}
+        \includegraphics[width=\linewidth]{figures/wd_plot.png}
         \caption{Accuracy and error by weight penalty.}
         \label{fig:weightrates}
     \end{subfigure} 
@@ -160,13 +188,36 @@
 
 %% Question Figure 5:
 \newcommand{\questionFigureFive} {
-\youranswer{Question Figure 5 - Add figures depicting the Validation Accuracy and Generalisation Gap (difference between validation and training error) for each of your 4 experiments  varying your hyperparameters for the combination of L1 and L2 regularisation (based on your implementation) depicted in Table 4.
+\youranswer{Question Figure 5 - Validation Accuracy and Generalisation Gap for Combined L1/L2 Experiments.
+   \begin{figure}[h]
+       \centering
+       \includegraphics[width=0.8\linewidth]{figures/combined_reg_plot.png}
+       \caption{Validation Accuracy and Generalisation Gap for different combinations of L1 and L2 regularization coefficients.}
+       \label{fig:l1l2combo}
+   \end{figure}
 }
 }
 
 %% Question Figure 6:
 \newcommand{\questionFigureSix} {
-\youranswer{Question Figure 6 - Add figures depicting the Training Accuracy, Error, and Gradient Flow Across Layers for the 1 experiment run with the Custom Activation function (produce these by running the "Problematic Training" cell in the Coursework\_1.ipynb notebook).
+\youranswer{Question Figure 6 - Training Accuracy, Error, and Gradient Flow for Custom Activation Function.
+   \begin{figure}[h]
+       \centering
+       \begin{subfigure}{0.32\linewidth}
+           \includegraphics[width=\linewidth]{figures/custom_act_acc.png}
+           \caption{Accuracy}
+       \end{subfigure}
+       \begin{subfigure}{0.32\linewidth}
+           \includegraphics[width=\linewidth]{figures/custom_act_error.png}
+           \caption{Error}
+       \end{subfigure}
+       \begin{subfigure}{0.32\linewidth}
+           \includegraphics[width=\linewidth]{figures/custom_act_grad_flow.png}
+           \caption{Gradient Flow}
+       \end{subfigure}
+       \caption{Training dynamics for the network with Custom Activation Function.}
+       \label{fig:custom_act}
+   \end{figure}
 }
 }
 
@@ -183,9 +234,9 @@ Question Table 1 - Fill in Table 1 with the results from your experiments varyin
     \toprule
         \# Hidden Units & Val. Acc. & Train Error & Val. Error\\
     \midrule
-         32            &    --.-   &  -.--- &   -.---            \\
-         64            &    --.-   &  -.---  &   -.---               \\
-         128           &    --.-   &  -.---  &   -.---           \\ 
+         32            &    80.12   &  0.484 &   0.649            \\
+         64            &    80.84   &  0.253  &   0.779               \\
+         128           &    82.02   &  0.109  &   1.589           \\ 
     \bottomrule
     \end{tabular}
     \caption{Validation accuracy (\%) and training/validation error (in terms of cross-entropy error) for varying network widths on the EMNIST dataset.}
@@ -205,9 +256,9 @@ Question Table 2 - Fill in Table 2 with the results from your experiments varyin
     \toprule
         \# Hidden Layers & Val. Acc. & Train Error & Val. Error \\
     \midrule
-         1               &      --.-      &   -.--- & -.---                \\
-         2               &      --.-      &   -.--- & -.---                \\
-         3               &      --.-      &   -.--- & -.---                \\ 
+         1               &      80.75      &   0.156 & 0.975                \\
+         2               &      82.02      &   0.109 & 1.589                \\
+         3               &      82.42      &   0.113 & 1.539                \\ 
     \bottomrule
     \end{tabular}
     \caption{Validation accuracy (\%) and training/validation error (in terms of cross-entropy error) for varying network depths on the EMNIST dataset.}
@@ -232,23 +283,23 @@ Question Table 3 - Fill in Table 3 with the results from your experiments for th
     \midrule
         \multirow{4}*{Dropout}
                  & 0.6                   &  80.7                &      0.549 & 0.593     \\
-                 & 0.7 & --.- & -.--- & -.---  \\
+                 & 0.7 & 83.0 & 0.450 & 0.515  \\
                  & 0.85 & 85.1 &  0.329 &  0.434 \\
                  & 0.97 & 85.4 &  0.244 & 0.457  \\
     \midrule
         \multirow{4}*{L1 penalty}
                  & 5e-4 & 79.5 & 0.642 & 0.658 \\
-                 & 1e-3 & --.- & -.--- & -.--- \\
+                 & 1e-3 & 85.3 & 0.340 & 0.429 \\
                  & 5e-3 & 2.41 & 3.850 & 3.850 \\
                  & 5e-2 & 2.20 & 3.850 & 3.850 \\
     \midrule
         \multirow{4}*{L2 penalty}  
                  & 5e-4 & 85.1 & 0.306 & 0.460 \\
-                 & 1e-3 & --.- & -.--- & -.--- \\
+                 & 1e-3 & 85.4 & 0.268 & 0.448 \\
                  & 5e-3 & 81.3 & 0.586 & 0.607 \\
                  & 5e-2 & 39.2 & 2.258 & 2.256  \\
     \midrule
-        Label smoothing & 0.1 & --.- & -.--- & -.--- \\
+        Label smoothing & 0.1 & 83.9 & 0.911 & 1.207 \\
     \bottomrule
     \end{tabular}
     \caption{Results of all hyperparameter search experiments. \emph{italics} indicate the best results per series (Dropout, L1 Regularisation, L2 Regularisation, Label smoothing) and \textbf{bold} indicates the best overall.}
@@ -261,7 +312,22 @@ Question Table 3 - Fill in Table 3 with the results from your experiments for th
 %% Question Table 4:
 \newcommand{\questionTableFour} {
 \youranswer{
-Question Table 4 - Add a table with the results from your 4 experiments (by which we mean: 4 training runs, NOT 4 sets of experiments) varying your hyperparameters for the combination of L1 and L2 regularisation (based on your implementation).
+Question Table 4 - Results for Combined L1 and L2 Regularization.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cc|ccc}
+    \toprule
+        L1 Coeff & L2 Coeff & Val. Acc. & Train Error & Val. Error \\
+    \midrule
+        1e-3 & 1e-3 & \textbf{86.34} & 0.361 & 0.414 \\
+        1e-3 & 5e-4 & 85.34 & 0.358 & 0.441 \\
+        5e-4 & 1e-3 & 81.40 & 0.585 & 0.607 \\
+        5e-4 & 5e-4 & 79.55 & 0.642 & 0.656 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Validation accuracy (\%) and training/validation error for combined L1 and L2 regularization.}
+    \label{tab:l1l2_exp}
+\end{table}
 }
 }
 
