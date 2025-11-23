@@ -1,3 +1,4 @@
+# Task 1: Network Width Experiments (Q2, Q3)
 import os
 import sys
 import numpy as np

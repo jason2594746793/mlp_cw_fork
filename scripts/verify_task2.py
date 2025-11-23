@@ -1,3 +1,4 @@
+# Task 2.1: Verification Script for Dropout and Penalties (Q6 Correctness Check)
 import os
 import sys
 import numpy as np

@@ -1,3 +1,4 @@
+# Task 1: Network Depth Experiments (Q4, Q5)
 import os
 import sys
 import numpy as np

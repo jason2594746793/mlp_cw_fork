@@ -1,0 +1,51 @@
+MLP Coursework 2 - Status Report & Next Steps
+===============================================
+
+Completed Tasks
+-----------------
+1.  **Code Implementation**
+    *   Implemented `L1Penalty`, `L2Penalty`, and `L1L2MixPenalty` in `mlp/penalties.py`.
+    *   Implemented `DropoutLayer` (Standard Dropout) in `mlp/layers.py`, ensuring it handles arbitrary input shapes and uses correct broadcasting.
+    *   Updated `CrossEntropySoftmaxError` to support Label Smoothing.
+    *   Verified implementation correctness using a custom test script (`scripts/verify_task2.py`) against the provided `regularization_debug_pack.npy`. Passed all tests (L1, L2, Dropout).
+
+2.  **Experiments & Data Collection**
+    *   **Network Width**: Trained models with hidden units [32, 64, 128]. (Width 128 best training performance but overfits).
+    *   **Network Depth**: Trained models with hidden layers [1, 2, 3]. (Depth 2 optimal; Depth 3 overfits).
+    *   **Regularization Hyperparameter Search**:
+        *   Dropout: [0.6, 0.7, 0.85, 0.97]. (Best: p=0.97 with ~85.4% Acc).
+        *   L1 Penalty: [5e-4, 1e-3, 5e-3, 5e-2]. (Best: 1e-3).
+        *   L2 Penalty: [5e-4, 1e-3, 5e-3, 5e-2]. (Best: 1e-3).
+        *   Label Smoothing: Tested with alpha=0.1.
+    *   **Combined L1+L2**: Ran 4 combinations. Found **L1=1e-3, L2=1e-3** to be the best performing model overall (~86.34% Val Acc).
+    *   **Custom Activation**: Analyzed the `CustomActivationLayer`. Found it fails to train due to vanishing gradients caused by the `1/20` scaling factor.
+
+3.  **Report Generation**
+    *   Filled in `report/mlp-cw1-questions.tex` with detailed answers for Questions 1-10.
+    *   Populated Tables 1, 2, 3, and 4 with experimental results.
+    *   Generated all required plots (Accuracy/Error curves, Dropout/Penalty sweeps, Gradient Flow).
+    *   Renamed generated figures to overwrite the "empty" template placeholders (e.g., `empty_acc_curve_width.png`) so they appear correctly in the standard template.
+
+Current Situation
+-----------------
+*   **Codebase**: Fully functional and verified. All experiments can be re-run via scripts in `scripts/`.
+*   **Report**: Drafted with all numerical results and figures inserted. The text answers provide analysis based on the results.
+*   **Figures**: All figures are in `report/figures/` and linked correctly in the LaTeX file.
+
+Next Steps for a High Grade
+---------------------------
+1.  **Review & Refine Report Text**:
+    *   Read through the generated answers in `mlp-cw1-questions.tex`. Ensure the language is academic, precise, and directly answers the prompt.
+    *   *Action*: Expand the discussion on *why* L1+L2 combination works best (combining feature selection of L1 with stability of L2).
+    *   *Action*: Double-check the explanation for Question 1 (Figure 1 analysis) to ensure it references the correct curves (blue=train, red=val) and explicitly points out the epoch where divergence starts.
+
+2.  **Visual Inspection**:
+    *   Compile the LaTeX PDF. Check that all images are legible, axes are labeled, and legends are clear.
+    *   Ensure the tables look correct and are not overflowing.
+
+3.  **Code Clean-up (Optional)**:
+    *   Remove temporary scripts (`scripts/verify_task2.py`, `scripts/move_figures.py`) before final submission if the submission requires a clean repo.
+    *   Ensure comments in `mlp/layers.py` and `mlp/penalties.py` are clear and explain the implementation logic (especially the choice of Standard Dropout vs Inverted Dropout).
+
+4.  **Final Sanity Check**:
+    *   Re-run `scripts/experiment_combination.py` one last time if you want to be 100% sure of the Table 4 numbers, as this is the "novel" contribution part.
