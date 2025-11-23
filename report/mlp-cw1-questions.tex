@@ -28,8 +28,8 @@
 \newcommand{\questionOne} {
 \youranswer{Question 1 - Figure \ref{fig:example_acccurves} shows the training and validation accuracy, while Figure \ref{fig:example_errorcurves} shows the cross-entropy error.
 The training accuracy (blue) rapidly increases to near 100\% and the training error (blue) decreases to near 0, indicating the model learns the training data perfectly.
-However, the validation error (red) decreases initially but starts to increase after around epoch 15-20, while validation accuracy plateaus and even slightly decreases.
-This divergence between training and validation performance is the hallmark of overfitting: the model is memorizing the training set (high capacity) but failing to generalize to unseen data (increasing validation error).}
+However, the validation error (red) decreases initially but starts to increase after around epoch 15-20.
+This divergence between training and validation performance is the hallmark of overfitting: the model is memorizing the training set (high capacity) but failing to generalize to unseen data.}
 }
 
 %% Question 2:
@@ -77,14 +77,13 @@ Therefore, I proposed to test combinations around these values:
 3. L1=5e-4, L2=1e-3: Moderate L1, strong L2.
 4. L1=5e-4, L2=5e-4: Weaker regularization to see if single penalties were too strong when combined.
 }
+}
 
 
 %% Question 8:
 \newcommand{\questionEight} {
-\youranswer{Question 8 - The experiment results (Table 4) show that the combination of L1=1e-3 and L2=1e-3 achieved the highest validation accuracy of 86.34\%.
-This is higher than the best single L1 (85.3\%) and best single L2 (85.4\%).
-The training error (0.361) and validation error (0.414) are close, indicating a small generalization gap (0.053), much better than the baseline gap (~1.3).
-This confirms that combined regularization effectively controls overfitting while maintaining high accuracy.
+\youranswer{Question 8 - Explain the experimental details (e.g. hyperparameters), discuss the results in terms of their generalisation performance and overfitting. Select and test the best performing model as part of this analysis.
+}
 }
 
 
@@ -96,21 +95,23 @@ The derivative is $f'(x) = f(x)(1 - 20f(x))$. Since $f(x)$ is very small, the gr
 Figure 6 shows the gradient flow is negligible, and the model fails to learn (Accuracy remains low, Error remains high).
 The model is not overfitting; it is failing to train (underfitting) due to vanishing gradients caused by the scaling factor.
 }
+}
+
+
 
 
 %% Question 10:
 \newcommand{\questionTen} {
-\youranswer{Question 10 - Conclusions:
-1. Increasing Network Width and Depth increases model capacity but leads to severe overfitting without regularization.
-2. Regularization techniques (Dropout, L1, L2, Label Smoothing) significantly improve generalization.
-3. Combining L1 and L2 regularization (Elastic Net) yielded the best performance (86.34\% accuracy), outperforming individual methods.
-4. Activation functions must be carefully scaled to avoid vanishing gradients, as demonstrated by the Custom Activation failure.
+\youranswer{Question 10 - Conclusions: \\
+1. Increasing Network Width and Depth increases model capacity but leads to severe overfitting without regularization. \\
+2. Regularization techniques (Dropout, L1, L2, Label Smoothing) significantly improve generalization. \\
+3. Combining L1 and L2 regularization (Elastic Net) yielded the best performance (86.34\% accuracy), outperforming individual methods. \\
+4. Activation functions must be carefully scaled to avoid vanishing gradients, as demonstrated by the Custom Activation failure. \\
 Future directions could explore learnable activation functions or more advanced regularization like Batch Normalization.
 }
-
+}
 
 %% - - - - - - - - - - - - FIGURES - - - - - - - - - - - - 
-
 
 %% Question Figure 2:
 \newcommand{\questionFigureTwo} {
@@ -133,7 +134,7 @@ Future directions could explore learnable activation functions or more advanced 
     \label{fig:width}
 \end{figure} 
 }
-
+}
 
 %% Question Figure 3:
 \newcommand{\questionFigureThree} {
@@ -156,7 +157,7 @@ Future directions could explore learnable activation functions or more advanced 
     \label{fig:depth}
 \end{figure} 
 }
-
+}
 
 %% Question Figure 4:
 \newcommand{\questionFigureFour} {
@@ -179,7 +180,7 @@ Future directions could explore learnable activation functions or more advanced 
     \label{fig:hp_search}
 \end{figure*}
 }
-
+}
 
 %% Question Figure 5:
 \newcommand{\questionFigureFive} {
@@ -191,7 +192,7 @@ Future directions could explore learnable activation functions or more advanced 
        \label{fig:l1l2combo}
    \end{figure}
 }
-
+}
 
 %% Question Figure 6:
 \newcommand{\questionFigureSix} {
@@ -214,10 +215,9 @@ Future directions could explore learnable activation functions or more advanced 
        \label{fig:custom_act}
    \end{figure}
 }
-
+}
 
 %% - - - - - - - - - - - - TABLES - - - - - - - - - - - - 
-
 
 %% Question Table 1:
 \newcommand{\questionTableOne} {
@@ -241,7 +241,6 @@ Question Table 1 - Fill in Table 1 with the results from your experiments varyin
 }
 }
 
-
 %% Question Table 2:
 \newcommand{\questionTableTwo} {
 \youranswer{
@@ -264,7 +263,6 @@ Question Table 2 - Fill in Table 2 with the results from your experiments varyin
 }
 }
 
-
 %% Question Table 3:
 \newcommand{\questionTableThree} {
 \youranswer{
@@ -277,7 +275,7 @@ Question Table 3 - Fill in Table 3 with the results from your experiments for th
         Model    &  Hyperparameter value(s) & Validation accuracy & Train Error & Validation Error \\
     \midrule
     \midrule
-        Baseline &  -                    &               0.837 &       0.241 &  0.533          \\
+        Baseline &  -                    &               83.7 &       0.241 &  0.533          \\
     \midrule
         \multirow{4}*{Dropout}
                  & 0.6                   &  80.7                &      0.549 & 0.593     \\
@@ -309,8 +307,7 @@ Question Table 3 - Fill in Table 3 with the results from your experiments for th
 
 %% Question Table 4:
 \newcommand{\questionTableFour} {
-\youranswer{
-Question Table 4 - Results for Combined L1 and L2 Regularization.
+\youranswer{Question Table 4 - Results for Combined L1 and L2 Regularization.
 \begin{table}[h]
     \centering
     \begin{tabular}{cc|ccc}
